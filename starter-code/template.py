@@ -13,6 +13,10 @@ import os
 import time
 from typing import Any, Callable
 
+from dotenv import load_dotenv
+
+load_dotenv() # Lệnh này sẽ tự động tìm file .env và nạp API key vào hệ thống
+
 # ---------------------------------------------------------------------------
 # Estimated costs per 1M INPUT & OUTPUT tokens (USD) as of March 2026
 # Vietnamese text generally consumes ~1.5x - 2.0x more tokens than English due to Unicode/diacritics.
@@ -20,8 +24,8 @@ from typing import Any, Callable
 PRICING_1M_TOKENS = {
     "gpt-4o": {"input": 5.00, "output": 20.00},
     "gpt-4o-mini": {"input": 0.150, "output": 0.600},
-    "gemini-2.5-flash": {"input": 0.075, "output": 0.300},
-    "gemini-2.5-pro": {"input": 1.25, "output": 5.00},
+    "gemini-3.6-flash": {"input": 0.075, "output": 0.300},
+    "gemini-3.1-pro": {"input": 1.25, "output": 5.00},
     "claude-3-5-sonnet": {"input": 3.00, "output": 15.00},
     "claude-3-5-haiku": {"input": 0.80, "output": 4.00},
 }
@@ -29,7 +33,7 @@ PRICING_1M_TOKENS = {
 # Standard Model Identifiers
 OPENAI_MODEL = "gpt-4o"
 OPENAI_MINI_MODEL = "gpt-4o-mini"
-GEMINI_MODEL = "gemini-2.5-flash"
+GEMINI_MODEL = "gemini-3.6-flash"
 ANTHROPIC_MODEL = "claude-3-5-haiku"
 
 
@@ -185,7 +189,7 @@ def call_anthropic(
 # ---------------------------------------------------------------------------
 def compare_models(prompt: str) -> dict:
     """
-    Call OpenAI (gpt-4o), OpenAI Mini (gpt-4o-mini), and Gemini 2.5 Flash (gemini-2.5-flash)
+    Call OpenAI (gpt-4o), OpenAI Mini (gpt-4o-mini), and Gemini 2.5 Flash (gemini-3.6-flash)
     with the same prompt and return a structured comparison dictionary.
     """
     # Call GPT-4o
@@ -205,8 +209,8 @@ def compare_models(prompt: str) -> dict:
     # Call Gemini 2.5 Flash
     gemini_text, gemini_lat, gemini_usage = call_gemini(prompt, model=GEMINI_MODEL)
     gemini_cost = (
-        gemini_usage["input_tokens"] * PRICING_1M_TOKENS["gemini-2.5-flash"]["input"] +
-        gemini_usage["output_tokens"] * PRICING_1M_TOKENS["gemini-2.5-flash"]["output"]
+        gemini_usage["input_tokens"] * PRICING_1M_TOKENS["gemini-3.6-flash"]["input"] +
+        gemini_usage["output_tokens"] * PRICING_1M_TOKENS["gemini-3.6-flash"]["output"]
     ) / 1_000_000
     
     return {
